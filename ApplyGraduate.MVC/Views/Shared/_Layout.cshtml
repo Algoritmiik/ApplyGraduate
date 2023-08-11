@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Mezuniyet / Cübbe Otomasyonu</title>
+
+    <link rel="apple-touch-icon" href="~/app-assets/images/ico/apple-icon-120.png">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i%7CQuicksand:300,400,500,700" rel="stylesheet">
+
+    <!-- BEGIN: Vendor CSS-->
+    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/vendors.min.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/tables/datatable/datatables.min.css">
+    @await RenderSectionAsync("VendorCSS", false)
+    <!-- END: Vendor CSS-->
+
+    <!-- BEGIN: Theme CSS-->
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/bootstrap-extended.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/colors.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/components.css">
+    @await RenderSectionAsync("ThemeCSS", false)
+    <!-- END: Theme CSS-->
+
+    <!-- BEGIN: Page CSS-->
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/core/menu/menu-types/horizontal-menu.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/core/colors/palette-gradient.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/plugins/animate/animate.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/fonts/simple-line-icons/style.css">
+
+    @await RenderSectionAsync("PageCSS", false)
+    <!-- END: Page CSS-->
+
+    <!-- BEGIN: Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
+    @await RenderSectionAsync("CustomCSS", false)
+    <!-- END: Custom CSS-->
+</head>
+
+<!-- BEGIN: Body-->
+<body class="horizontal-layout horizontal-menu horizontal-menu-padding 2-columns" data-open="click" data-menu="horizontal-menu" data-col="2-columns">
+
+    <!-- BEGIN: Header-->
+    @await Component.InvokeAsync("LayoutHeader")
+    <!-- END: Header-->
+
+    <!-- BEGIN: Main Menu-->
+    @await Component.InvokeAsync("LayoutMainMenu")
+    <!-- END: Main Menu-->
+
+    <!-- BEGIN: Alert -->
+    @await Component.InvokeAsync("LayoutAlert")
+    <!-- END: Alert -->
+
+    @RenderBody()
+
+    <div class="sidenav-overlay"></div>
+    <div class="drag-target"></div>
+
+    <!-- BEGIN: Footer-->
+    @await Component.InvokeAsync("LayoutFooter")
+    <!-- END: Footer-->
+
+
+    <!-- BEGIN: Vendor JS-->
+    <script src="~/app-assets/vendors/js/vendors.min.js"></script>
+    @await RenderSectionAsync("VendorJS", false)
+    <!-- BEGIN Vendor JS-->
+
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="~/app-assets/vendors/js/ui/jquery.sticky.js"></script>
+    <script src="~/app-assets/vendors/js/tables/datatable/datatables.min.js"></script>
+    @await RenderSectionAsync("PageVendorJS", false)
+    <!-- END: Page Vendor JS-->
+
+    <!-- BEGIN: Theme JS-->
+    <script src="~/app-assets/js/core/app-menu.js"></script>
+    <script src="~/app-assets/js/core/app.js"></script>
+    @await RenderSectionAsync("ThemeJS", false)
+    <!-- END: Theme JS-->
+
+    <!-- BEGIN: Page JS-->
+    <script src="~/app-assets/js/scripts/animation/animation.js"></script>
+    <script src="~/app-assets/js/scripts/tables/datatables/datatable-styling.js"></script>
+    @await RenderSectionAsync("PageJS", false)
+    <!-- END: Page JS-->
+
+    <!-- BEGIN: FontAwesome JS-->
+    <script src="https://kit.fontawesome.com/4e733125a1.js" crossorigin="anonymous"></script>
+    <!-- END: FontAwesome JS-->
+
+    <!-- BEGIN: Custom JS-->
+    @await RenderSectionAsync("CustomJS", false)
+    <!-- END: Custom JS-->
+
+</body>
+<!-- END: Body-->
+</html>

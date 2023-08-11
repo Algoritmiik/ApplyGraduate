@@ -1,0 +1,288 @@
+@model HomeAppliesResultModel
+@{
+    Layout = "_StudentLayout";
+    ViewData["Title"] = "Mezuniyet / Cübbe Başvuru Durumu";
+
+    string PhoneNumberSeperator(string phoneNumber)
+    {
+        phoneNumber = phoneNumber.Insert(0, "(");
+        phoneNumber = phoneNumber.Insert(4, ")");
+        phoneNumber = phoneNumber.Insert(5, " ");
+        phoneNumber = phoneNumber.Insert(9, " ");
+        phoneNumber = phoneNumber.Insert(12, " ");
+        return phoneNumber;
+    }
+}
+<!-- BEGIN: Content -->
+<div class="container">
+    <div class="row align-items-center mt-4">
+        <div class="col-10 offset-1 col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h4 class="card-title text-white" id="horz-layout-colored-controls"><i class="la la-book"></i>
+                        Başvuru Durumu</h4>
+                    <div class="heading-elements">
+                        <ul class="list-inline mb-0">
+                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                        <p class="card-text">Başvurunuz @Model.Student.CreatedDate.ToString("dd MMM yyyy") tarihinde
+                            <b>@Model.Student.Name @Model.Student.Surname</b> adına başarıyla alınmıştır. Bilgilerinizi
+                            aşağıda görüntüleyebilirsiniz.
+                        </p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            @if (Model.Student.GownRequest)
+                            {
+                                <span class="bg-success badge badge-pill float-right">
+                                    <i class="fa-solid fa-check"></i>
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="bg-danger badge badge-pill float-right">
+                                    <i class="fa-solid fa-times"></i>
+                                </span>
+                            }
+                            Cübbe Talebi
+                        </li>
+                        @if (Model.Student.GownRequest)
+                        {
+                            <li class="list-group-item">
+                                <span class="badge badge-pill bg-info float-right">@Model.Student.GownSize</span>
+                                Cübbe Ölçüsü
+                            </li>
+                        }
+                        <li class="list-group-item">
+                            @if (Model.Student.CompanionStatus)
+                            {
+                                <span class="bg-success badge badge-pill float-right">
+                                    <i class="fa-solid fa-check"></i>
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="bg-danger badge badge-pill float-right">
+                                    <i class="fa-solid fa-times"></i>
+                                </span>
+                            }
+                            Refakatçi Getirme Durumu
+                        </li>
+                        @if (Model.Student.CompanionStatus)
+                        {
+                            <li class="list-group-item">
+                                <a type="button" data-toggle="modal" data-target="#companionsListModal" href="#"
+                                class="card-link">Refakatçileri Görüntüle</a>
+                            </li>
+                        }
+                        @if (Model.Student.Note != null)
+                        {
+                            <li class="list-group-item">
+                                <a type="button" data-toggle="modal" data-target="#noteModal" href="#"
+                                class="card-link">Notumu Görüntüle</a>
+                            </li>
+                        }
+                    </ul>
+                    <div class="card-body">
+                        <div class="row">
+                            @if (Model.Student.DidJoin == false)
+                            {    
+                                @if (Model.Student.DidPaid == false)
+                                {
+                                    <div class="col-4 col-md-4 col-lg-3 col-xl-2">
+                                        <a asp-controller="Home" asp-action="UpdateApply" class="card-link">Düzenle</a>
+                                    </div>
+                                }
+                                <div class="col-4 col-md-4 col-xl-3">
+                                    <a type="button" data-toggle="modal" data-target="#companionModal" href="#"
+                                        class="card-link">Refakatçi Ekle</a>
+                                </div>
+                                <div class="col-4 col-md-4">
+                                    <a type="button" data-toggle="modal" data-target="#deleteApplyModal" href="#"
+                                        class="card-link text-danger">Başvuruyu Sil</a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- BEGıN: Add Companion Modal -->
+<div class="modal animated fadeInDown text-left" id="companionModal" tabindex="-1" role="dialog"
+    aria-labelledby="myCompanionModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary">
+                <h4 class="modal-title text-white" id="myCompanionModal">Refakatçi Bilgileri</h4>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-controller="Home" asp-action="AddCompanion" autocomplete="off">
+                    <div asp-validation-summary="ModelOnly"></div>
+                    <div class="modal-body">
+
+                        <label>İsim: </label>
+                        <div class="form-group position-relative has-icon-left">
+                            <input asp-for="addCompanionDto.Name" placeholder="İsim" class="form-control">
+                            <span asp-validation-for="addCompanionDto.Name" class="text-danger"></span>
+                            <div class="form-control-position">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                        </div>
+
+                        <label>Soyisim: </label>
+                        <div class="form-group position-relative has-icon-left">
+                            <input asp-for="addCompanionDto.Surname" placeholder="Soyisim" class="form-control">
+                            <span asp-validation-for="addCompanionDto.Surname" class="text-danger"></span>
+                            <div class="form-control-position">
+                                <i class="fa-solid fa-id-badge"></i>
+                            </div>
+                        </div>
+
+                        <label>HES Kodu: </label>
+                        <div class="form-group position-relative has-icon-left">
+                            <input asp-for="addCompanionDto.HesCode" placeholder="HES Kod" class="form-control">
+                            <div class="form-control-position">
+                                <i class="fa-solid fa-virus-covid"></i>
+                            </div>
+                            <span asp-validation-for="addCompanionDto.HesCode" class="text-danger"></span>
+                        </div>
+
+                        <label>Telefon Numarası: </label>
+                        <br>
+                        <span class="text-muted small">(Başında 0 olmadan giriniz)</span>
+                        <div class="form-group position-relative has-icon-left">
+                            <input asp-for="addCompanionDto.PhoneNumber" placeholder="(5xx)-xxx-xx-xx"
+                                class="form-control" type="number">
+                            <div class="form-control-position">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <span asp-validation-for="addCompanionDto.PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">Kapat</button>
+                        <button type="submit" class="btn btn-outline-primary">Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END: Add Companion Modal -->
+
+<!-- BEGIN: CompanionsList Modal -->
+<div class="modal animated flipInY text-left" id="companionsListModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary">
+                <h4 class="modal-title text-white" id="myModalLabel62"><i class="fa-solid fa-user-group"></i> <b>Refakatçiler</b></h4>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @if (Model.Student.Companions != null && Model.Student.Companions.Count > 0)
+                {
+                    @foreach (var companion in Model.Student.Companions)
+                    {
+                        <ul class="list-unstyled">
+                            <li>
+                                <b>İsim:</b> @companion.Name
+                            </li>
+                            <li>
+                                <b>Soyisim:</b> @companion.Surname
+                            </li>
+                            <li>
+                                <b>Hes Kod:</b> @companion.HesCode
+                            </li>
+                            <li>
+                                <b>Telefon Numarası:</b> @PhoneNumberSeperator(companion.PhoneNumber)
+                            </li>
+                        </ul>
+                        <a asp-controller="Home" asp-action="DeleteCompanion" asp-route-id="@companion.Id" type="button"
+                    class="btn btn-danger btn-sm buttonAnimation" data-animation="rubberBand">Sil</a>
+                        <hr>
+                    }
+                }
+                else
+                {
+                    <div class="alert round bg-danger mb-2" role="alert">
+                        <b>Refakatçiniz bulunmamaktadır!</b>
+                    </div>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END: CompanionsList Modal -->
+
+<!-- BEGIN: Delete Apply Modal -->
+<div class="modal animated slideInLeft text-left" id="deleteApplyModal" tabindex="-1" role="dialog"
+    aria-labelledby="myDeleteApplyModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h4 class="modal-title text-white" id="myDeleteApplyModal"><b>Başvuru Sil</b></h4>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5>Başvurunuzu silmek istediğinize emin misiniz?</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">İptal</button>
+                <a asp-controller="Home" asp-action="DeleteApply" asp-route-id="@Model.Student.Id"
+                    class="btn btn-danger">Sil</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END: Delete Apply Modal -->
+
+<!-- BEGIN: Note Modal -->
+<div class="modal animated flipInY text-left" id="noteModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary">
+                <h4 class="modal-title text-white" id="myModalLabel62"><i class="fa-solid fa-clipboard"></i> <b>Not</b></h4>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @if (Model.Student.Note != null)
+                {
+                    <p>@Model.Student.Note</p>
+                }
+                else
+                {
+                    <div class="alert round bg-danger mb-2" role="alert">
+                        <b>Notunuz bulunmamaktadır!</b>
+                    </div>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END: Note Modal -->
+
+<div>
+    <!-- END: Content-->

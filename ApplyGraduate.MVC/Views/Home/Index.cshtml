@@ -1,0 +1,192 @@
+﻿@model HomeIndexResultModel
+@{
+    Layout = "_StudentLayout";
+    ViewData["Title"] = "Mezuniyet / Cübbe Başvuru Formu";
+}
+
+    <!-- BEGIN: Content -->
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-10 offset-lg-1">
+                <div class="card">
+                    <div class="card-header bg-secondary text-white">
+                        <h4 class="card-title text-white" id="horz-layout-colored-controls">Cübbe Başvuru Formu</h4>
+                        <div class="heading-elements">
+                            <ul class="list-inline mb-0">
+                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+                            <form class="form form-horizontal" asp-controller="Home" asp-action="Index" method="post"
+                                autocomplete="off">
+
+                                <div asp-validation-summary="ModelOnly"></div>
+                                <div class="form-body">
+                                    <h4 class="form-section"><i class="la la-user"></i> Bilgileriniz</h4>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-md-3 label-control text-lg-center"
+                                                    asp-for="studentGetterDto.Name">İsim</label>
+                                                <div class="col-md-9 mx-auto">
+                                                    <input asp-for="studentGetterDto.Name" class="form-control"
+                                                        placeholder="First Name" disabled>
+                                                    <span asp-validation-for="studentGetterDto.Name"
+                                                        class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-md-3 label-control text-lg-center"
+                                                    asp-for="studentGetterDto.Surname">Soyisim</label>
+                                                <div class="col-md-9 mx-auto">
+                                                    <input asp-for="studentGetterDto.Surname" class="form-control"
+                                                        placeholder="Last Name" disabled>
+                                                    <span asp-validation-for="studentGetterDto.Surname"
+                                                        class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-md-3 label-control text-lg-center"
+                                                    asp-for="studentGetterDto.Faculty">Fakülte</label>
+                                                <div class="col-md-9 mx-auto">
+                                                    <input asp-for="studentGetterDto.Faculty" class="form-control"
+                                                        placeholder="Fakülte" disabled>
+                                                    <span asp-validation-for="studentGetterDto.Faculty"
+                                                        class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-md-3 label-control text-lg-center"
+                                                    asp-for="studentGetterDto.Unit">Birim</label>
+                                                <div class="col-md-9 mx-auto">
+                                                    <input asp-for="studentGetterDto.Unit" class="form-control"
+                                                        placeholder="Unit" disabled>
+                                                    <span asp-validation-for="studentGetterDto.Unit"
+                                                        class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-md-3 label-control text-lg-center"
+                                                    asp-for="studentGetterDto.Program">Program</label>
+                                                <div class="col-md-9 mx-auto">
+                                                    <input asp-for="studentGetterDto.Program" class="form-control"
+                                                        placeholder="Program" disabled>
+                                                    <span asp-validation-for="studentGetterDto.Program"
+                                                        class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h4 class="form-section"><i class="la la-file-text"></i> Katılım Formu</h4>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+
+                                            <div class="form-group row">
+                                                <label asp-for="addStudentDto.GownRequest"
+                                                    class="col-md-3 label-control text-lg-center">Cübbe
+                                                    Talebi</label>
+                                                <div class="col-md-9 mx-auto">
+                                                    <fieldset>
+                                                        <div class="float-left" id="GownRequstSwitchDiv">
+                                                            <input asp-for="addStudentDto.GownRequest"
+                                                                class="switch bordered" id="GownRequstSwitch"
+                                                                data-off-label="Hayır" data-on-label="Evet"
+                                                                data-switch-always />
+                                                            <span asp-validation-for="addStudentDto.GownRequest"
+                                                                class="text-danger"></span>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row d-none" id="GownSizeSelectListDiv">
+                                                <label class="col-md-3 label-control text-lg-center"
+                                                    asp-for="addStudentDto.GownSize">Beden</label>
+                                                <div class="col-md-8 mx-auto">
+                                                    <select class="selectBox-hide-first rounded form-control form-control-sm"
+                                                        asp-for="addStudentDto.GownSize" asp-items="ViewBag.GownSizes" style="max-width: 95px;">
+                                                        <option value="" selected disabled>Beden</option>
+                                                    </select>
+                                                    <span asp-validation-for="addStudentDto.GownSize"
+                                                        class="text-danger"></span>
+                                                    <span class="text-danger">@Html.ValidationMessage("Error")</span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-md-3 label-control text-lg-center"
+                                                    asp-for="addStudentDto.Note">Not</label>
+                                                <div class="col-md-9 mx-auto">
+                                                    <textarea asp-for="addStudentDto.Note" rows="4" class="form-control"
+                                                        placeholder="Notunuz"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-actions text-right">
+                                    @if (Model.IsUpdate != null && Model.IsUpdate == true)
+                                    {
+                                        <a href="\" type="button" class="btn btn-warning mr-1 buttonAnimation" data-animation="pulse">
+                                            <i class="ft-x"></i> İptal
+                                        </a>
+                                    }
+                                    <button type="submit" class="btn btn-primary buttonAnimation" data-animation="rubberBand">
+                                        <i class="la la-check-square-o"></i> Kaydet
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END: Content-->
+
+    @section PageVendorJS{
+        <script src="~/app-assets/vendors/js/forms/toggle/bootstrap-switch.min.js"></script>
+        <script src="~/app-assets/vendors/js/forms/toggle/switchery.min.js"></script>
+        <script src="~/app-assets/vendors/js/forms/toggle/bootstrap-checkbox.min.js"></script>
+    }
+
+    @section PageJS{
+        <script src="~/app-assets/js/scripts/forms/switch.js"></script>
+    }
+
+    @section CustomJS{
+        <script>
+            if ($('#GownRequstSwitch').is(":checked")) {
+                document.getElementById('GownSizeSelectListDiv').classList.remove("d-none")
+            } else {
+                document.getElementById('GownSizeSelectListDiv').classList.add("d-none")
+            }
+
+            $("body").on('click', "#GownRequstSwitchDiv", function () {
+                if ($('#GownRequstSwitch').is(":checked")) {
+                    document.getElementById('GownSizeSelectListDiv').classList.remove("d-none")
+                } else {
+                    document.getElementById('GownSizeSelectListDiv').classList.add("d-none")
+                }
+            });
+        </script>
+    }

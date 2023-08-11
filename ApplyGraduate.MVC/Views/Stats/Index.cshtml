@@ -1,0 +1,978 @@
+@model StatsGettersResultModel
+@{
+    ViewData["Title"] = "İstatistikler";
+    var activeStudents = Model.statsStudentsGetterDto.Students.Where(s => s.HaveApplied == true && s.IsDeleted == false);
+    var activeCompanions = Model.statsCompanionsGetterDto.Companions.Where(c => c.Student.HaveApplied == true &&
+    c.Student.IsDeleted == false && c.IsDeleted == false);
+    var gownRequesters = Model.statsStudentsGetterDto.Students.Where(s => s.HaveApplied == true && s.IsDeleted == false &&
+    s.GownRequest == true);
+    var getPaidsCount = activeStudents.Where(s => s.DidPaid == true).Count();
+}
+@section VendorCSS{
+<link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/charts/morris.css">
+}
+<!-- BEGIN: Content-->
+<div class="container-fluid mt-1">
+    <!-- BEGIN: Main Stats Card -->
+    <div class="row">
+        <div class="col-xl-3 col-lg-6 col-12">
+            <div class="card pull-up">
+                <div class="card-content">
+                    <div class="card-body">
+                        <div class="media d-flex">
+                            <div class="media-body text-left">
+                                <h3 class="info">@activeStudents.Count()</h3>
+                                <h6>Aktif Öğrenci Başvurusu</h6>
+                            </div>
+                            <div>
+                                <i class="icon-user info font-large-2 float-right"></i>
+                            </div>
+                        </div>
+                        <div class="progress progress-sm mt-1 mb-0 box-shadow-2">
+                            <div class="progress-bar bg-gradient-x-info" role="progressbar" style="width: 100%"
+                                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-12">
+            <div class="card pull-up">
+                <div class="card-content">
+                    <div class="card-body">
+                        <div class="media d-flex">
+                            <div class="media-body text-left">
+                                <h3 class="success">@activeCompanions.Count()</h3>
+                                <h6>Aktif Refakatçi Başvurusu</h6>
+                            </div>
+                            <div>
+                                <i class="icon-users success font-large-2 float-right"></i>
+                            </div>
+                        </div>
+                        <div class="progress progress-sm mt-1 mb-0 box-shadow-2">
+                            <div class="progress-bar bg-gradient-x-success" role="progressbar" style="width: 100%"
+                                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-12">
+            <div class="card pull-up">
+                <div class="card-content">
+                    <div class="card-body">
+                        <div class="media d-flex">
+                            <div class="media-body text-left">
+                                <h3 class="warning">@gownRequesters.Count()</h3>
+                                <h6>Toplam Cübbe Talebi</h6>
+                            </div>
+                            <div>
+                                <i class="icon-graduation warning font-large-2 float-right"></i>
+                            </div>
+                        </div>
+                        <div class="progress progress-sm mt-1 mb-0 box-shadow-2">
+                            <div class="progress-bar bg-gradient-x-warning" role="progressbar" style="width: 100%"
+                                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-12">
+            <div class="card pull-up">
+                <div class="card-content">
+                    <div class="card-body">
+                        <div class="media d-flex">
+                            <div class="media-body text-left">
+                                <h3 class="danger">@getPaidsCount</h3>
+                                <h6>Alınan Cübbe Ödemeleri</h6>
+                            </div>
+                            <div>
+                                <i class="icon-wallet danger font-large-2 float-right"></i>
+                            </div>
+                        </div>
+                        <div class="progress progress-sm mt-1 mb-0 box-shadow-2">
+                            <div class="progress-bar bg-gradient-x-danger" role="progressbar" style="width: 99%"
+                                aria-valuenow="99" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END: Main Stats Card -->
+
+    <!-- BEGIN: Secondary Stat Card -->
+    <div class="row">
+        <div class="col-12">
+            <!-- BEGIN: Faculty Based Stats Card -->
+            <div class="card">
+                <div class="card-header bg-gradient-x-blue" style="max-height: 80px;">
+                    <div class="d-flex align-items-start">
+                        <h4 class="text-white">Fakülte Bazlı İstatistikler</h4>
+                        <div class="ml-auto">
+                            <div class="form-group">
+                                <div>
+                                    <form asp-controller="Stats" asp-action="Index" method="post" id="facultyForm">
+                                        <input type="hidden" name="UnitSelectInput" id="UnitSelectInputInFaculty"
+                                            value="-1">
+                                        <input type="hidden" name="ProgramSelectInput" id="ProgramSelectInputInFaculty"
+                                            value="-1">
+                                        @if (Model.FacultySelect == -1)
+                                        {
+                                            <select class="form-control border-info bg-white" style="width: 200px;"
+                                            name="facultySelect" id="facultySelect">
+                                                <option value="-1">Tümü</option>
+                                                @foreach (var faculty in Model.statFacultiesGetterDto.Faculties)
+                                                {
+                                                    <option value="@faculty.Id">@faculty.Name</option>
+                                                }
+                                            </select>
+                                        }
+                                        else
+                                        {
+                                            <select class="form-control border-info bg-white" style="width: 200px;"
+                                            name="facultySelect" id="facultySelect">
+                                                <option value="-1">Tümü</option>
+                                                @foreach (var faculty in Model.statFacultiesGetterDto.Faculties)
+                                                {
+                                                    if (faculty.Id == Model.FacultySelect)
+                                                    {
+                                                        <option value="@faculty.Id" selected>@faculty.Name</option>
+                                                        continue;
+                                                    }
+                                                    <option value="@faculty.Id">@faculty.Name</option>
+                                                }
+                                            </select>
+                                        }
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if (Model.FacultySelect == -1)
+                {
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="p-1 text-center">
+                                            <div>
+                                                <h3 class="display-4 blue-grey darken-1">
+                                                    @Model.statsStudentsGetterDto.Students.Count()</h3>
+                                                <span class="blue-grey darken-1">Toplam Öğrenci Başvuru</span>
+                                            </div>
+                                            <div class="card-content">
+                                                <div id="morris-likes"></div>
+                                                <ul class="list-inline clearfix">
+                                                    <li class="border-right-blue-grey border-right-lighten-2 pr-1">
+                                                        <h1 class="success text-bold-400">@activeStudents.Where(s =>
+                                                        s.DidJoin == true).Count()</h1>
+                                                        <span class="success darken-3"><i class="la la-check-circle"></i>
+                                                            Katılan</span>
+                                                    </li>
+                                                    <li class="pl-1">
+                                                        <h1 class="danger text-bold-400">
+                                                            @Model.statsStudentsGetterDto.Students.Where(s => s.HaveApplied
+                                                        == false && s.IsDeleted == true).Count()</h1>
+                                                        <span class="danger darken-4"><i class="la la-times-circle"></i>
+                                                            Silinen</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="p-1 text-center">
+                                            <div>
+                                                <h3 class="display-4 blue-grey darken-1">
+                                                    @Model.statsCompanionsGetterDto.Companions.Count</h3>
+                                                <span class="blue-grey darken-1">Toplam Refakatçi Başvuru</span>
+                                            </div>
+                                            <div class="card-content">
+                                                <div id="morris-likes"></div>
+                                                <ul class="list-inline clearfix">
+                                                    <li class="border-right-blue-grey border-right-lighten-2 pr-1">
+                                                        <h1 class="success text-bold-400">@activeCompanions.Where(s =>
+                                                        s.DidJoin == true).Count()</h1>
+                                                        <span class="success darken-3"><i class="la la-check-circle"></i>
+                                                            Katılan</span>
+                                                    </li>
+                                                    <li class="pl-1">
+                                                        <h1 class="danger text-bold-400">
+                                                            @Model.statsCompanionsGetterDto.Companions.Where(c => c.DidJoin
+                                                        == false && c.IsDeleted == true).Count()</h1>
+                                                        <span class="danger darken-4"><i class="la la-times-circle"></i>
+                                                            Silinen</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="p-1 text-center">
+                                            <div>
+                                                <h3 class="display-4 blue-grey darken-1">
+                                                    @activeStudents.Where(s => s.GownRequest == true).Count()</h3>
+                                                <span class="blue-grey darken-1">Toplam Cübbe Başvuru</span>
+                                            </div>
+                                            <div class="card-content">
+                                                <div id="morris-likes"></div>
+                                                <ul class="list-inline clearfix">
+                                                    <li class="border-right-blue-grey border-right-lighten-2 pr-1">
+                                                        <h1 class="success text-bold-400">@activeStudents.Where(s =>
+                                                        s.GownRequest == true && s.DidPaid == true).Count()</h1>
+                                                        <span class="success darken-3"><i class="la la-money"></i>
+                                                            Ödenen</span>
+                                                    </li>
+                                                    <li class="pl-1">
+                                                        <h1 class="text-primary text-bold-400">
+                                                            @activeStudents.Where(s => s.GownRequest == true && s.DidTake ==
+                                                        true).Count()</h1>
+                                                        <span class="text-primary darken-4"><i
+                                                            class="la la-thumbs-o-up"></i>
+                                                            Teslim Alınan</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="p-1 text-center">
+                                            <div>
+                                                <h3 class="display-4 blue-grey darken-1">
+                                                    @Model.statsStudentsGetterDto.Students.Where(s =>
+                                                s.Program.Unit.Faculty.Id == Model.FacultySelect).Count()</h3>
+                                                <span class="blue-grey darken-1">Toplam Öğrenci Başvuru</span>
+                                            </div>
+                                            <div class="card-content">
+                                                <div id="morris-likes"></div>
+                                                <ul class="list-inline clearfix">
+                                                    <li class="border-right-blue-grey border-right-lighten-2 pr-1">
+                                                        <h1 class="success text-bold-400">@activeStudents.Where(s =>
+                                                        s.DidJoin == true && s.Program.Unit.Faculty.Id ==
+                                                        Model.FacultySelect).Count()</h1>
+                                                        <span class="success darken-3"><i class="la la-check-circle"></i>
+                                                            Katılan</span>
+                                                    </li>
+                                                    <li class="pl-1">
+                                                        <h1 class="danger text-bold-400">
+                                                            @Model.statsStudentsGetterDto.Students.Where(s => s.HaveApplied
+                                                        == false && s.IsDeleted == true && s.Program.Unit.Faculty.Id ==
+                                                        Model.FacultySelect).Count()</h1>
+                                                        <span class="danger darken-4"><i class="la la-times-circle"></i>
+                                                            Silinen</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="p-1 text-center">
+                                            <div>
+                                                <h3 class="display-4 blue-grey darken-1">
+                                                    @Model.statsCompanionsGetterDto.Companions.Where(c =>
+                                                c.Student.Program.Unit.Faculty.Id == Model.FacultySelect).Count()</h3>
+                                                <span class="blue-grey darken-1">Toplam Refakatçi Başvuru</span>
+                                            </div>
+                                            <div class="card-content">
+                                                <div id="morris-likes"></div>
+                                                <ul class="list-inline clearfix">
+                                                    <li class="border-right-blue-grey border-right-lighten-2 pr-1">
+                                                        <h1 class="success text-bold-400">@activeCompanions.Where(c =>
+                                                        c.DidJoin == true && c.Student.Program.Unit.Faculty.Id ==
+                                                        Model.FacultySelect).Count()</h1>
+                                                        <span class="success darken-3"><i class="la la-check-circle"></i>
+                                                            Katılan</span>
+                                                    </li>
+                                                    <li class="pl-1">
+                                                        <h1 class="danger text-bold-400">
+                                                            @Model.statsCompanionsGetterDto.Companions.Where(c => c.DidJoin
+                                                        == false && c.IsDeleted == true &&
+                                                        c.Student.Program.Unit.Faculty.Id ==
+                                                        Model.FacultySelect).Count()</h1>
+                                                        <span class="danger darken-4"><i class="la la-times-circle"></i>
+                                                            Silinen</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="p-1 text-center">
+                                            <div>
+                                                <h3 class="display-4 blue-grey darken-1">
+                                                    @activeStudents.Where(s => s.GownRequest == true &&
+                                                s.Program.Unit.Faculty.Id == Model.FacultySelect).Count()</h3>
+                                                <span class="blue-grey darken-1">Toplam Cübbe Başvuru</span>
+                                            </div>
+                                            <div class="card-content">
+                                                <div id="morris-likes"></div>
+                                                <ul class="list-inline clearfix">
+                                                    <li class="border-right-blue-grey border-right-lighten-2 pr-1">
+                                                        <h1 class="success text-bold-400">@activeStudents.Where(s =>
+                                                        s.GownRequest == true && s.DidPaid == true &&
+                                                        s.Program.Unit.Faculty.Id == Model.FacultySelect).Count()</h1>
+                                                        <span class="success darken-3"><i class="la la-money"></i>
+                                                            Ödenen</span>
+                                                    </li>
+                                                    <li class="pl-1">
+                                                        <h1 class="text-primary text-bold-400">
+                                                            @activeStudents.Where(s => s.GownRequest == true && s.DidTake ==
+                                                        true && s.Program.Unit.Faculty.Id ==
+                                                        Model.FacultySelect).Count()</h1>
+                                                        <span class="text-primary darken-4"><i
+                                                            class="la la-thumbs-o-up"></i>
+                                                            Teslim Alınan</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <!-- END: Faculty Based Stats Card -->
+
+            <!-- BEGIN: Unit Based Stats Card -->
+            <div class="card">
+                <div class="card-header bg-gradient-x-cyan" style="max-height: 80px;">
+                    <div class="d-flex">
+                        <h4 class="text-white">Birim Bazlı İstatistikler</h4>
+                        <div class="ml-auto">
+                            <div class="form-group">
+                                <div>
+                                    <form asp-controller="Stats" asp-action="Index" method="post" id="unitForm">
+                                        <input type="hidden" name="FacultySelectInput" id="FacultySelectInputInUnit"
+                                            value="-1">
+                                        <input type="hidden" name="ProgramSelectInput" id="ProgramSelectInputInUnit"
+                                            value="-1">
+                                        @if (Model.UnitSelect == -1)
+                                        {
+                                            <select class="form-control border-cyan bg-white" style="width: 200px;"
+                                            name="unitSelect" id="unitSelect">
+                                                <option value="-1">Tümü</option>
+                                                @foreach (var unit in Model.statsUnitsGetterDto.Units)
+                                                {
+                                                    <option value="@unit.Id">@unit.Name</option>
+                                                }
+                                            </select>
+                                        }
+                                        else
+                                        {
+                                            <select class="form-control border-cyan bg-white" style="width: 200px;"
+                                            name="unitSelect" id="unitSelect">
+                                                <option value="-1">Tümü</option>
+                                                @foreach (var unit in Model.statsUnitsGetterDto.Units)
+                                                {
+                                                    if (unit.Id == Model.UnitSelect)
+                                                    {
+                                                        <option value="@unit.Id" selected>@unit.Name</option>
+                                                        continue;
+                                                    }
+                                                    <option value="@unit.Id">@unit.Name</option>
+                                                }
+                                            </select>
+                                        }
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if (Model.UnitSelect == -1)
+                {
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="p-1 text-center">
+                                            <div>
+                                                <h3 class="display-4 blue-grey darken-1">
+                                                    @Model.statsStudentsGetterDto.Students.Count()</h3>
+                                                <span class="blue-grey darken-1">Toplam Öğrenci Başvuru</span>
+                                            </div>
+                                            <div class="card-content">
+                                                <div id="morris-likes"></div>
+                                                <ul class="list-inline clearfix">
+                                                    <li class="border-right-blue-grey border-right-lighten-2 pr-1">
+                                                        <h1 class="success text-bold-400">@activeStudents.Where(s =>
+                                                        s.DidJoin == true).Count()</h1>
+                                                        <span class="success darken-3"><i class="la la-check-circle"></i>
+                                                            Katılan</span>
+                                                    </li>
+                                                    <li class="pl-1">
+                                                        <h1 class="danger text-bold-400">
+                                                            @Model.statsStudentsGetterDto.Students.Where(s => s.HaveApplied
+                                                        == false && s.IsDeleted == true).Count()</h1>
+                                                        <span class="danger darken-4"><i class="la la-times-circle"></i>
+                                                            Silinen</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="p-1 text-center">
+                                            <div>
+                                                <h3 class="display-4 blue-grey darken-1">
+                                                    @Model.statsCompanionsGetterDto.Companions.Count</h3>
+                                                <span class="blue-grey darken-1">Toplam Refakatçi Başvuru</span>
+                                            </div>
+                                            <div class="card-content">
+                                                <div id="morris-likes"></div>
+                                                <ul class="list-inline clearfix">
+                                                    <li class="border-right-blue-grey border-right-lighten-2 pr-1">
+                                                        <h1 class="success text-bold-400">@activeCompanions.Where(s =>
+                                                        s.DidJoin == true).Count()</h1>
+                                                        <span class="success darken-3"><i class="la la-check-circle"></i>
+                                                            Katılan</span>
+                                                    </li>
+                                                    <li class="pl-1">
+                                                        <h1 class="danger text-bold-400">
+                                                            @Model.statsCompanionsGetterDto.Companions.Where(c => c.DidJoin
+                                                        == false && c.IsDeleted == true).Count()</h1>
+                                                        <span class="danger darken-4"><i class="la la-times-circle"></i>
+                                                            Silinen</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="p-1 text-center">
+                                            <div>
+                                                <h3 class="display-4 blue-grey darken-1">
+                                                    @activeStudents.Where(s => s.GownRequest == true).Count()</h3>
+                                                <span class="blue-grey darken-1">Toplam Cübbe Başvuru</span>
+                                            </div>
+                                            <div class="card-content">
+                                                <div id="morris-likes"></div>
+                                                <ul class="list-inline clearfix">
+                                                    <li class="border-right-blue-grey border-right-lighten-2 pr-1">
+                                                        <h1 class="success text-bold-400">@activeStudents.Where(s =>
+                                                        s.GownRequest == true && s.DidPaid == true).Count()</h1>
+                                                        <span class="success darken-3"><i class="la la-money"></i>
+                                                            Ödenen</span>
+                                                    </li>
+                                                    <li class="pl-1">
+                                                        <h1 class="text-primary text-bold-400" id="bisiler">
+                                                            @activeStudents.Where(s => s.GownRequest == true && s.DidTake ==
+                                                        true).Count()</h1>
+                                                        <span class="text-primary darken-4"><i
+                                                            class="la la-thumbs-o-up"></i>
+                                                            Teslim Alınan</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="p-1 text-center">
+                                            <div>
+                                                <h3 class="display-4 blue-grey darken-1">
+                                                    @Model.statsStudentsGetterDto.Students.Where(s => s.Program.Unit.Id ==
+                                                Model.UnitSelect).Count()</h3>
+                                                <span class="blue-grey darken-1">Toplam Öğrenci Başvuru</span>
+                                            </div>
+                                            <div class="card-content">
+                                                <div id="morris-likes"></div>
+                                                <ul class="list-inline clearfix">
+                                                    <li class="border-right-blue-grey border-right-lighten-2 pr-1">
+                                                        <h1 class="success text-bold-400">@activeStudents.Where(s =>
+                                                        s.DidJoin == true && s.Program.Unit.Id ==
+                                                        Model.UnitSelect).Count()</h1>
+                                                        <span class="success darken-3"><i class="la la-check-circle"></i>
+                                                            Katılan</span>
+                                                    </li>
+                                                    <li class="pl-1">
+                                                        <h1 class="danger text-bold-400">
+                                                            @Model.statsStudentsGetterDto.Students.Where(s => s.HaveApplied
+                                                        == false && s.IsDeleted == true && s.Program.Unit.Id ==
+                                                        Model.UnitSelect).Count()</h1>
+                                                        <span class="danger darken-4"><i class="la la-times-circle"></i>
+                                                            Silinen</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="p-1 text-center">
+                                            <div>
+                                                <h3 class="display-4 blue-grey darken-1">
+                                                    @Model.statsCompanionsGetterDto.Companions.Where(c =>
+                                                c.Student.Program.Unit.Id == Model.UnitSelect).Count()</h3>
+                                                <span class="blue-grey darken-1">Toplam Refakatçi Başvuru</span>
+                                            </div>
+                                            <div class="card-content">
+                                                <div id="morris-likes"></div>
+                                                <ul class="list-inline clearfix">
+                                                    <li class="border-right-blue-grey border-right-lighten-2 pr-1">
+                                                        <h1 class="success text-bold-400">@activeCompanions.Where(c =>
+                                                        c.DidJoin == true && c.Student.Program.Unit.Id ==
+                                                        Model.UnitSelect).Count()</h1>
+                                                        <span class="success darken-3"><i class="la la-check-circle"></i>
+                                                            Katılan</span>
+                                                    </li>
+                                                    <li class="pl-1">
+                                                        <h1 class="danger text-bold-400">
+                                                            @Model.statsCompanionsGetterDto.Companions.Where(c => c.DidJoin
+                                                        == false && c.IsDeleted == true && c.Student.Program.Unit.Id ==
+                                                        Model.UnitSelect).Count()</h1>
+                                                        <span class="danger darken-4"><i class="la la-times-circle"></i>
+                                                            Silinen</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="p-1 text-center">
+                                            <div>
+                                                <h3 class="display-4 blue-grey darken-1">
+                                                    @activeStudents.Where(s => s.GownRequest == true && s.Program.Unit.Id ==
+                                                Model.UnitSelect).Count()</h3>
+                                                <span class="blue-grey darken-1">Toplam Cübbe Başvuru</span>
+                                            </div>
+                                            <div class="card-content">
+                                                <div id="morris-likes"></div>
+                                                <ul class="list-inline clearfix">
+                                                    <li class="border-right-blue-grey border-right-lighten-2 pr-1">
+                                                        <h1 class="success text-bold-400">@activeStudents.Where(s =>
+                                                        s.GownRequest == true && s.DidPaid == true && s.Program.Unit.Id
+                                                        == Model.UnitSelect).Count()</h1>
+                                                        <span class="success darken-3"><i class="la la-money"></i>
+                                                            Ödenen</span>
+                                                    </li>
+                                                    <li class="pl-1">
+                                                        <h1 class="text-primary text-bold-400" id="bisiler">
+                                                            @activeStudents.Where(s => s.GownRequest == true && s.DidTake ==
+                                                        true && s.Program.Unit.Id == Model.UnitSelect).Count()</h1>
+                                                        <span class="text-primary darken-4"><i
+                                                            class="la la-thumbs-o-up"></i>
+                                                            Teslim Alınan</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <!-- END: Unit Based Stats Card -->
+
+            <!-- BEGIN: Program Based Stats Card -->
+            <div class="card">
+                <div class="card-header bg-gradient-x-purple" style="max-height: 80px;">
+                    <div class="d-flex">
+                        <h4 class="text-white">Program Bazlı İstatistikler</h4>
+                        <div class="ml-auto">
+                            <div class="form-group">
+                                <div>
+                                    <form asp-controller="Stats" asp-action="Index" method="post" id="programForm">
+                                        <input type="hidden" name="FacultySelectInput" id="FacultySelectInputInProgram"
+                                            value="-1">
+                                        <input type="hidden" name="UnitSelectInput" id="UnitSelectInputInProgram"
+                                            value="-1">
+                                        @if (Model.ProgramSelect == -1)
+                                        {
+                                            <select class="form-control border-purple bg-white" style="width: 200px;"
+                                            name="programSelect" id="programSelect">
+                                                <option value="-1">Tümü</option>
+                                                @foreach (var program in Model.statsProgramsGetterDto.Programs)
+                                                {
+                                                    <option value="@program.Id">@program.Name</option>
+                                                }
+                                            </select>
+                                        }
+                                        else
+                                        {
+                                            <select class="form-control border-purple bg-white" style="width: 200px;"
+                                            name="programSelect" id="programSelect">
+                                                <option value="-1">Tümü</option>
+                                                @foreach (var program in Model.statsProgramsGetterDto.Programs)
+                                                {
+                                                    if (program.Id == Model.ProgramSelect)
+                                                    {
+                                                        <option value="@program.Id" selected>@program.Name</option>
+                                                        continue;
+                                                    }
+                                                    <option value="@program.Id">@program.Name</option>
+                                                }
+                                            </select>
+                                        }
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if (Model.ProgramSelect == -1)
+                {
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="p-1 text-center">
+                                            <div>
+                                                <h3 class="display-4 blue-grey darken-1">
+                                                    @Model.statsProgramsGetterDto.Programs.Count()</h3>
+                                                <span class="blue-grey darken-1">Toplam Öğrenci Başvuru</span>
+                                            </div>
+                                            <div class="card-content">
+                                                <div id="morris-likes"></div>
+                                                <ul class="list-inline clearfix">
+                                                    <li class="border-right-blue-grey border-right-lighten-2 pr-1">
+                                                        <h1 class="success text-bold-400">@activeStudents.Where(s =>
+                                                        s.DidJoin == true).Count()</h1>
+                                                        <span class="success darken-3"><i class="la la-check-circle"></i>
+                                                            Katılan</span>
+                                                    </li>
+                                                    <li class="pl-1">
+                                                        <h1 class="danger text-bold-400">
+                                                            @Model.statsStudentsGetterDto.Students.Where(s => s.HaveApplied
+                                                        == false && s.IsDeleted == true).Count()</h1>
+                                                        <span class="danger darken-4"><i class="la la-times-circle"></i>
+                                                            Silinen</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="p-1 text-center">
+                                            <div>
+                                                <h3 class="display-4 blue-grey darken-1">
+                                                    @Model.statsCompanionsGetterDto.Companions.Count</h3>
+                                                <span class="blue-grey darken-1">Toplam Refakatçi Başvuru</span>
+                                            </div>
+                                            <div class="card-content">
+                                                <div id="morris-likes"></div>
+                                                <ul class="list-inline clearfix">
+                                                    <li class="border-right-blue-grey border-right-lighten-2 pr-1">
+                                                        <h1 class="success text-bold-400">@activeCompanions.Where(s =>
+                                                        s.DidJoin == true).Count()</h1>
+                                                        <span class="success darken-3"><i class="la la-check-circle"></i>
+                                                            Katılan</span>
+                                                    </li>
+                                                    <li class="pl-1">
+                                                        <h1 class="danger text-bold-400">
+                                                            @Model.statsCompanionsGetterDto.Companions.Where(c => c.DidJoin
+                                                        == false && c.IsDeleted == true).Count()</h1>
+                                                        <span class="danger darken-4"><i class="la la-times-circle"></i>
+                                                            Silinen</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="p-1 text-center">
+                                            <div>
+                                                <h3 class="display-4 blue-grey darken-1">
+                                                    @activeStudents.Where(s => s.GownRequest == true).Count()</h3>
+                                                <span class="blue-grey darken-1">Toplam Cübbe Başvuru</span>
+                                            </div>
+                                            <div class="card-content">
+                                                <div id="morris-likes"></div>
+                                                <ul class="list-inline clearfix">
+                                                    <li class="border-right-blue-grey border-right-lighten-2 pr-1">
+                                                        <h1 class="success text-bold-400">@activeStudents.Where(s =>
+                                                        s.GownRequest == true && s.DidPaid == true).Count()</h1>
+                                                        <span class="success darken-3"><i class="la la-money"></i>
+                                                            Ödenen</span>
+                                                    </li>
+                                                    <li class="pl-1">
+                                                        <h1 class="text-primary text-bold-400" id="bisiler">
+                                                            @activeStudents.Where(s => s.GownRequest == true && s.DidTake ==
+                                                        true).Count()</h1>
+                                                        <span class="text-primary darken-4"><i
+                                                            class="la la-thumbs-o-up"></i>
+                                                            Teslim Alınan</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="p-1 text-center">
+                                            <div>
+                                                <h3 class="display-4 blue-grey darken-1">
+                                                    @Model.statsStudentsGetterDto.Students.Where(s => s.Program.Id ==
+                                                Model.ProgramSelect).Count()</h3>
+                                                <span class="blue-grey darken-1">Toplam Öğrenci Başvuru</span>
+                                            </div>
+                                            <div class="card-content">
+                                                <div id="morris-likes"></div>
+                                                <ul class="list-inline clearfix">
+                                                    <li class="border-right-blue-grey border-right-lighten-2 pr-1">
+                                                        <h1 class="success text-bold-400">@activeStudents.Where(s =>
+                                                        s.DidJoin == true && s.Program.Id ==
+                                                        Model.ProgramSelect).Count()</h1>
+                                                        <span class="success darken-3"><i class="la la-check-circle"></i>
+                                                            Katılan</span>
+                                                    </li>
+                                                    <li class="pl-1">
+                                                        <h1 class="danger text-bold-400">
+                                                            @Model.statsStudentsGetterDto.Students.Where(s => s.HaveApplied
+                                                        == false && s.IsDeleted == true && s.Program.Id ==
+                                                        Model.ProgramSelect).Count()</h1>
+                                                        <span class="danger darken-4"><i class="la la-times-circle"></i>
+                                                            Silinen</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="p-1 text-center">
+                                            <div>
+                                                <h3 class="display-4 blue-grey darken-1">
+                                                    @Model.statsCompanionsGetterDto.Companions.Where(c =>
+                                                c.Student.Program.Id == Model.ProgramSelect).Count()</h3>
+                                                <span class="blue-grey darken-1">Toplam Refakatçi Başvuru</span>
+                                            </div>
+                                            <div class="card-content">
+                                                <div id="morris-likes"></div>
+                                                <ul class="list-inline clearfix">
+                                                    <li class="border-right-blue-grey border-right-lighten-2 pr-1">
+                                                        <h1 class="success text-bold-400">@activeCompanions.Where(c =>
+                                                        c.DidJoin == true && c.Student.Program.Id ==
+                                                        Model.ProgramSelect).Count()</h1>
+                                                        <span class="success darken-3"><i class="la la-check-circle"></i>
+                                                            Katılan</span>
+                                                    </li>
+                                                    <li class="pl-1">
+                                                        <h1 class="danger text-bold-400">
+                                                            @Model.statsCompanionsGetterDto.Companions.Where(c => c.DidJoin
+                                                        == false && c.IsDeleted == true && c.Student.Program.Id ==
+                                                        Model.ProgramSelect).Count()</h1>
+                                                        <span class="danger darken-4"><i class="la la-times-circle"></i>
+                                                            Silinen</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="p-1 text-center">
+                                            <div>
+                                                <h3 class="display-4 blue-grey darken-1">
+                                                    @activeStudents.Where(s => s.GownRequest == true && s.Program.Id ==
+                                                Model.ProgramSelect).Count()</h3>
+                                                <span class="blue-grey darken-1">Toplam Cübbe Başvuru</span>
+                                            </div>
+                                            <div class="card-content">
+                                                <div id="morris-likes"></div>
+                                                <ul class="list-inline clearfix">
+                                                    <li class="border-right-blue-grey border-right-lighten-2 pr-1">
+                                                        <h1 class="success text-bold-400">@activeStudents.Where(s =>
+                                                        s.GownRequest == true && s.DidPaid == true && s.Program.Id ==
+                                                        Model.ProgramSelect).Count()</h1>
+                                                        <span class="success darken-3"><i class="la la-money"></i>
+                                                            Ödenen</span>
+                                                    </li>
+                                                    <li class="pl-1">
+                                                        <h1 class="text-primary text-bold-400" id="bisiler">
+                                                            @activeStudents.Where(s => s.GownRequest == true && s.DidTake ==
+                                                        true && s.Program.Id == Model.ProgramSelect).Count()</h1>
+                                                        <span class="text-primary darken-4"><i
+                                                            class="la la-thumbs-o-up"></i>
+                                                            Teslim Alınan</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <!-- END: Program Based Stats Card -->
+            
+            <div class="card">
+                <div class="card-header bg-gradient-x-pink" style="max-height: 80px;">
+                    <div class="d-flex">
+                        <h4 class="text-white">Cübbe Ölçüsü Bazlı İstatistikler</h4>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="row">
+                        <div class="col-12">
+                            <div id="donut-chart" class="height-400 m-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- END: Secondary Stat Card -->
+
+    <div id="chart">
+    </div>
+
+</div>
+<!-- END: Content-->
+@section PageVendorJS{
+<script src="~/app-assets/vendors/js/charts/raphael-min.js"></script>
+<script src="~/app-assets/vendors/js/charts/morris.min.js"></script>
+}
+@section CustomJS {
+<script>
+    $(document).ready(function () {
+        document.querySelector("#FacultySelectInputInUnit").value = document.querySelector("#facultySelect").value;
+        document.querySelector("#FacultySelectInputInProgram").value = document.querySelector("#facultySelect").value;
+
+        document.querySelector("#UnitSelectInputInFaculty").value = document.querySelector("#unitSelect").value;
+        document.querySelector("#UnitSelectInputInProgram").value = document.querySelector("#unitSelect").value;
+
+        document.querySelector("#ProgramSelectInputInFaculty").value = document.querySelector("#programSelect").value;
+        document.querySelector("#ProgramSelectInputInUnit").value = document.querySelector("#programSelect").value;
+    });
+
+    $("#facultySelect").change(function () {
+        document.querySelector("#FacultySelectInputInUnit").value = document.querySelector("#facultySelect").value;
+        document.querySelector("#FacultySelectInputInProgram").value = document.querySelector("#facultySelect").value;
+        document.querySelector("#facultyForm").submit();
+    });
+
+    $("#unitSelect").change(function () {
+        document.querySelector("#UnitSelectInputInFaculty").value = document.querySelector("#unitSelect").value;
+        document.querySelector("#UnitSelectInputInProgram").value = document.querySelector("#unitSelect").value;
+        document.querySelector("#unitForm").submit();
+    });
+
+    $("#programSelect").change(function () {
+        document.querySelector("#ProgramSelectInputInFaculty").value = document.querySelector("#programSelect").value;
+        document.querySelector("#ProgramSelectInputInUnit").value = document.querySelector("#programSelect").value;
+        document.querySelector("#programForm").submit();
+    });
+
+
+
+    // Donut chart
+    // ------------------------------
+    $(window).on("load", function(){
+
+        Morris.Donut({
+            element: 'donut-chart',
+            data: [{
+                label: "XS",
+                value: @gownRequesters.Where(gr => gr.GownSize == "XS").ToList().Count
+            }, {
+                label: "S",
+                value: @gownRequesters.Where(gr => gr.GownSize == "S").ToList().Count
+            }, {
+                label: "M",
+                value: @gownRequesters.Where(gr => gr.GownSize == "M").ToList().Count
+            }, {
+                label: "L",
+                value: @gownRequesters.Where(gr => gr.GownSize == "L").ToList().Count
+            }, {
+                label: "XL",
+                value: @gownRequesters.Where(gr => gr.GownSize == "XL").ToList().Count
+            }, {
+                label: "XXL",
+                value: @gownRequesters.Where(gr => gr.GownSize == "XXL").ToList().Count
+            }, ],
+            resize: true,
+            colors: ['#FFD581', '#B61AAE', '#FF4C29','#864879','#D82148','#026D81']
+        });
+    });
+</script>
+}

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+
+    <link rel="apple-touch-icon" href="~/app-assets/images/ico/apple-icon-120.png">
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i%7CQuicksand:300,400,500,700"
+        rel="stylesheet">
+
+    <!-- BEGIN: Vendor CSS-->
+    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/vendors.min.css">
+    @await RenderSectionAsync("VendorCSS", false)
+    <!-- END: Vendor CSS-->
+
+    <!-- BEGIN: Theme CSS-->
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/bootstrap-extended.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/colors.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/components.css">
+    @await RenderSectionAsync("ThemeCSS", false)
+    <!-- END: Theme CSS-->
+
+    <!-- BEGIN: Page CSS-->
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/core/menu/menu-types/horizontal-menu.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/core/colors/palette-gradient.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/plugins/animate/animate.css">
+    @await RenderSectionAsync("PageCSS", false)
+    <!-- END: Page CSS-->
+
+    <!-- BEGIN: Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
+    @await RenderSectionAsync("CustomCSS", false)
+    <style>
+        #StudentLayoutBody {
+            transition: background-image 2s linear;
+            background-image: url(/app-assets/images/FSMResimleri/4.71173c31.jpg);
+            height: 100vh;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+    </style>
+    <!-- END: Custom CSS-->
+</head>
+
+<!-- BEGIN: Body-->
+
+<body class="horizontal-layout horizontal-menu horizontal-menu-padding bg-img 2-columns" data-open="click"
+    id="StudentLayoutBody" data-menu="horizontal-menu" data-col="2-columns">
+
+    <!-- BEGIN: Header-->
+    <nav class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow navbar-light navbar-brand-center bg-transparent">
+        <div class="navbar-wrapper">
+            <div class="navbar-header">
+                <ul class="nav navbar-nav flex-row">
+                    <li class="nav-item"><a class="navbar-brand p-1" href="#"><img class="brand-logo img-fluid"
+                                alt="modern admin logo"
+                                src="https://covid19.fsm.edu.tr/admin-assets/images/logo/logo.svg"
+                                style="width: 100%; height: 100%;"></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- END: Header-->
+
+    <!-- BEGIN: Alert -->
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-10 offset-1 col-md-6 offset-md-3">
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show mt-1" role="alert">
+                        @Html.Raw(TempData["SuccessMessage"])
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                }
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-error alert-dismissible fade show mt-1" role="alert">
+                        @Html.Raw(TempData["ErrorMessage"])
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <!-- END: Alert -->
+
+    @RenderBody()
+
+    <!-- BEGIN: Footer-->
+    <div class="container fixed-bottom">
+        <footer class="footer footer-transparent footer-light navbar-shadow rounded-pill">
+            <p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2 container center-layout"><span
+                    class="float-md-left d-block d-md-inline-block"><img
+                        src="\app-assets\images\FSMResimleri\FsmIcon.png" alt="deneme" width="16"> FSMVU &copy;
+                    @DateTime.Today.Year</span><span class="float-md-right d-none d-lg-block">Yazılım Birimi #0.1<i
+                        class="ft-heart pink"></i><span id="scroll-top"></span></span></p>
+        </footer>
+    </div>
+    <!-- END: Footer-->
+
+
+    <!-- BEGIN: Vendor JS-->
+    <script src="~/app-assets/vendors/js/vendors.min.js"></script>
+    @await RenderSectionAsync("VendorJS", false)
+    <!-- BEGIN Vendor JS-->
+
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="~/app-assets/vendors/js/ui/jquery.sticky.js"></script>
+    @await RenderSectionAsync("PageVendorJS", false)
+    <!-- END: Page Vendor JS-->
+
+    <!-- BEGIN: Theme JS-->
+    <script src="~/app-assets/js/core/app-menu.js"></script>
+    <script src="~/app-assets/js/core/app.js"></script>
+    @await RenderSectionAsync("ThemeJS", false)
+    <!-- END: Theme JS-->
+
+    <!-- BEGIN: Page JS-->
+    <script src="~/app-assets/js/scripts/animation/animation.js"></script>
+    @await RenderSectionAsync("PageJS", false)
+    <!-- END: Page JS-->
+
+    <!-- BEGIN: FontAwesome JS-->
+    <script src="https://kit.fontawesome.com/4e733125a1.js" crossorigin="anonymous"></script>
+    <!-- END: FontAwesome JS-->
+
+    <!-- BEGIN: Validation Scripts -->
+    <script src="~/app-assets/js/scripts/jquery-validate/jquery.validate.min.js"></script>
+    <script src="~/app-assets/js/scripts/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <!-- END: Validation Scripts -->
+
+    <!-- BEGIN: Custom JS-->
+    @await RenderSectionAsync("CustomJS", false)
+    <script>
+        function changeBg() {
+            const images = [
+                'url("/app-assets/images/FSMResimleri/1.434a5489.jpg")',
+                'url("/app-assets/images/FSMResimleri/2.cf591ef1.jpg")',
+                'url("/app-assets/images/FSMResimleri/3.acf267d4.jpg")',
+                'url("/app-assets/images/FSMResimleri/4.71173c31.jpg")',
+                'url("/app-assets/images/FSMResimleri/5.9934e9ee.jpg")',
+                'url("/app-assets/images/FSMResimleri/6.2bac21e5.jpg")',
+                'url("/app-assets/images/FSMResimleri/7.69e51955.jpg")',
+                'url("/app-assets/images/FSMResimleri/8.df935e24.jpg")',
+                'url("/app-assets/images/FSMResimleri/9.da6ee241.jpg")',
+                'url("/app-assets/images/FSMResimleri/10.5c13e65d.jpg")',
+                'url("/app-assets/images/FSMResimleri/11.5134ed32.jpg")',
+                'url("/app-assets/images/FSMResimleri/12.839d2daf.jpg")',
+                'url("/app-assets/images/FSMResimleri/13.8d6b6079.jpg")',
+                'url("/app-assets/images/FSMResimleri/14.6738b0f0.jpg")',
+                'url("/app-assets/images/FSMResimleri/15.160cdb68.jpg")',
+                'url("/app-assets/images/FSMResimleri/16.8a90197d.jpg")',
+            ]
+
+            const body = document.querySelector('#StudentLayoutBody');
+            const bg = images[Math.floor(Math.random() * images.length)];
+            body.style.backgroundImage = bg;
+        }
+
+        setInterval(changeBg, 6000)
+    </script>
+    <!-- END: Custom JS-->
+
+</body>
+<!-- END: Body-->
+
+</html>

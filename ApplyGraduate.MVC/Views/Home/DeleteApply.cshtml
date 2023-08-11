@@ -1,0 +1,47 @@
+@{
+    Layout = "_StudentLayout";
+    ViewData["Title"] = "Başvuru İptali";
+}
+
+    <!-- BEGIN: Content-->
+    <div class="container">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="row align-items-center" style="min-height: 40vh;">
+                <div class="col-10 offset-1 col-md-6 offset-md-3">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-body">
+                                <h4 class="card-title"><i class="la la-book"></i> Başvuru Durumu</h4>
+                                <p class="card-text"><i class="fa-solid fa-circle-check text-success"></i>
+                                    @Html.Raw(TempData["SuccessMessage"])</p>
+                            </div>
+                            <div class="card-body">
+                                <a asp-controller="Home" asp-action="Index" class="card-link">Yeni Başvuru</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (TempData["ErrorCardMessage"] != null)
+        {
+            <div class="row align-items-center" style="min-height: 40vh;">
+                <div class="col-10 offset-1 col-md-6 offset-md-3">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-body">
+                                <h4 class="card-title"><i class="la la-book"></i> Başvuru Durumu</h4>
+                                <p class="card-text"><i class="fa-solid fa-circle-exclamation text-danger"></i>
+                                    @Html.Raw(TempData["ErrorCardMessage"])</p>
+                            </div>
+                            <div class="card-body">
+                                <a asp-controller="Home" asp-action="Index" class="card-link">Geri Dön</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <!-- END: Content-->

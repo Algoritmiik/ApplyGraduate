@@ -1,0 +1,100 @@
+@model AdminPanelSettingsResultModel
+@{
+    ViewData["Title"] = "Ayarlar";
+}
+@section VendorCSS{
+<link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/pickers/daterange/daterangepicker.css">
+<link rel="stylesheet" type="text/css" href="~/app-assets/vendors/css/pickers/pickadate/pickadate.css">
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-6 offset-md-3">
+            <div id="accordionWrapa1" role="tablist" aria-multiselectable="true">
+                <div class="card accordion mt-3">
+                    <a id="dateSettingsHeading" class="card-header" data-toggle="collapse" href="#dateSettings"
+                        aria-expanded="false" aria-controls="dateSettings">
+                        <div class="card-title lead collapsed">Tarih Ayarları</div>
+                    </a>
+                    <div id="dateSettings" role="tabpanel" data-parent="#accordionWrapa1" aria-labelledby="dateSettings"
+                        class="collapse" aria-expanded="false">
+                        <div class="card-content">
+                            <div class="card-body">
+                                <form asp-controller="AdminPanel" asp-action="ChangeDate" method="post">
+                                    <div class="row">
+                                        <div class="col-12 col-md-8 offset-md-2 mb-1">
+                                            <label for="">Başvuru Başlangıç Tarihi:</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <span class="la la-calendar-o"></span>
+                                                    </span>
+                                                </div>
+                                                <input asp-for="addRegisterDateDto.RegisterBeginningDate"
+                                                    class="form-control datepicker" type="date" id="picker_from" placeholder="Başvuru Başlangıç Tarihini Seçiniz">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-8 offset-md-2 mb-1">
+                                            <label for="">Başvuru Bitiş Tarihi:</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <span class="la la-calendar-o"></span>
+                                                    </span>
+                                                </div>
+                                                <input asp-for="addRegisterDateDto.RegisterEndingDate"
+                                                    class="form-control datepicker" type="date" id="picker_to" placeholder="Başvuru Bitiş Tarihini Seçiniz">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-8 offset-md-2">
+                                            <label for="">Mezuniyet Tarihi:</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <span class="la la-calendar-o"></span>
+                                                    </span>
+                                                </div>
+                                                <input asp-for="addRegisterDateDto.GraduationDate" class="form-control pickadate datepicker" placeholder="Mezuniyet Tarihini Seçiniz" />
+                                            </div>
+                                            <button class="btn btn-primary mt-1 float-right">Değiştir</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <a id="companionSettingsHeader" class="card-header" data-toggle="collapse" href="#companionSettings"
+                        aria-expanded="false" aria-controls="companionSettings">
+                        <div class="card-title lead collapsed">Refakatçi Ayarları</div>
+                    </a>
+                    <div id="companionSettings" role="tabpanel" data-parent="#accordionWrapa1"
+                        aria-labelledby="companionSettingsHeader" class="collapse" aria-expanded="false">
+                        <div class="card-content">
+                            <div class="card-body">
+                                Candy cupcake sugar plum oat cake wafer marzipan jujubes lollipop macaroon. Cake dragée
+                                jujubes donut chocolate
+                                bar chocolate cake cupcake chocolate topping. Dessert jelly beans toffee muffin tiramisu
+                                sesame snaps brownie.
+                                Cake halvah pastry soufflé oat cake candy candy canes. Lemon drops gummies gingerbread
+                                toffee. Tart jelly candy
+                                pastry. Pastry cake jelly beans carrot cake marzipan lollipop muffin. Soufflé jujubes
+                                cupcake. Powder danish
+                                candy carrot cake pastry. Tart marshmallow caramels cake macaroon gummies lollipop.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section PageVendorJS{
+<script src="~/app-assets/vendors/js/pickers/pickadate/picker.js"></script>
+<script src="~/app-assets/vendors/js/pickers/pickadate/picker.date.js"></script>
+<script src="~/app-assets/vendors/js/pickers/dateTime/moment-with-locales.min.js"></script>
+}
+
+@section PageJS{
+<script src="~/app-assets/js/scripts/pickers/dateTime/pick-a-datetime.js"></script>
+}

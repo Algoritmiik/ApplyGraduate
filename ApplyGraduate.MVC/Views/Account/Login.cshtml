@@ -1,0 +1,18 @@
+@model User
+@{
+    Layout = "";
+}
+
+
+<form asp-controller="Account" asp-action="Login" method="post">
+    <input type="hidden" name="returnUrl" value='@ViewData["returnUrl"]'>
+    
+    <label asp-for="UserName">Kullanıcı Adı: </label>
+    <input asp-for="UserName">
+    <br> <br>
+    
+    <label asp-for="PasswordHash">Şifre: </label>
+    <input asp-for="PasswordHash">
+    <br> <br>
+    <button type="submit">Gönder</button>
+</form>

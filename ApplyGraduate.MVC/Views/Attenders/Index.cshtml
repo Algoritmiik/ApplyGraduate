@@ -1,0 +1,130 @@
+@model AdminPanelIndexResultModel
+@{
+    ViewData["Title"] = "Mezuniyet/Cübbe Başvuru";
+    int counter = 1;
+}
+
+<!-- BEGIN: Table -->
+<div class="container-fluid mt-2">
+    <div class="row">
+        <div class="col-12">
+            <table
+                class="table table-striped table-hover table-bordered table-responsive-md table-sm bootstrap-3 dataTable">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">İsim</th>
+                        <th scope="col">Soyisim</th>
+                        <th scope="col">Fakülte</th>
+                        <th scope="col">Birim</th>
+                        <th scope="col">Bölüm</th>
+                        <th scope="col">Not</th>
+                        <th scope="col">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var student in Model.Students)
+                    {
+                        <tr>
+                            <td scope="row"><b>@counter</b></td>
+                            <td scope="row">@student.Name</td>
+                            <td scope="row">@student.Surname</td>
+                            <td scope="row">@student.Faculty</td>
+                            <td>@student.Unit</td>
+                            <td>@student.Program</td>
+                            <td style="white-space: nowrap; max-width: 200px; overflow: hidden; text-overflow: ellipsis;">
+                                @if (!String.IsNullOrEmpty(student.Note))
+                                {
+                                    <span data-toggle="tooltip" data-placement="left" data-original-title="@student.Note">
+                                    <i class="icon-question"></i>
+                                    </span>
+                                    @student.Note
+                                }
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-purple dropdown-toggle btn-sm buttonAnimation"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                data-animation="jello">
+                                    <i class="fa-solid fa-hammer"></i> İşlemler
+                                </button>
+                                <div class="dropdown-menu arrow text-center">
+                                    @if (student.DidJoin != null && student.DidJoin == false)
+                                    {
+                                        <button class="btn btn-cyan" data-toggle="modal"
+                                    data-target="#hasJoinedModal_@student.Id">Katıldı</button>
+                                    }
+                                    <button class="btn btn-adn" data-toggle="modal"
+                                    data-target="#modal_@student.Id">Refakatçiler</button>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- BEGIN: Modals -->
+
+                        <!-- BEGIN: Companions Modal -->
+                        <div class="modal fade" id="modal_@student.Id" tabindex="-1"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-secondary">
+                                        <h5 class="modal-title text-white" id="modalTitleLabel_@student.Id">Refakatçi
+                                            Listesi</h5>
+                                        <button type="button" class="close white" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        @if (student.Companions != null && student.Companions.Count > 0)
+                                        {
+                                            @foreach (var companion in student.Companions)
+                                            {
+                                                <ul class="list-unstyled">
+                                                    <li>
+                                                        <b>İsim:</b> @companion.Name
+                                                    </li>
+                                                    <li>
+                                                        <b>Soyisim:</b> @companion.Surname
+                                                    </li>
+                                                    <li>
+                                                        <b>Hes Kod:</b> @companion.HesCode
+                                                    </li>
+                                                    <li>
+                                                        <b>Katılım Durumu:</b>
+                                                        @if (companion.DidJoin == false)
+                                                        {
+                                                            <span class="text-danger"><i class="fa-solid fa-times fa-xl"></i></span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="text-success"><i class="fa-solid fa-check fa-xl"></i></span>
+                                                        }
+                                                    </li>
+                                                </ul>
+                                                <hr>
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            <div class="alert round bg-danger mb-2" role="alert">
+                                                <b>@student.Name @student.Surname</b> isimli öğrencinin refakatçisi bulunmamaktadır!
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- END: Companions Modal -->
+                        <!-- END: Modals -->
+                        counter++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- END: Table -->
